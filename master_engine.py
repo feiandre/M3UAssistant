@@ -91,6 +91,4 @@ if __name__ == '__main__':
     master = MasterEngine()
     master.preparing()
     master.downloading(urls=['http://sample01.ts', 'http://sample02.ts'])
-    # master.finishing(key_url=key_url,
-    #                  input_files=['./ts/01.ts', './ts/02.ts'],
-    #                  out_name='./out.mp4')
+    master.finishing()
