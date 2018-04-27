@@ -4,6 +4,7 @@ from bcolors import BColors
 
 import subprocess as sp
 import sys
+import os
 
 
 class Downloader:
@@ -18,10 +19,13 @@ class Downloader:
             exit("abort: Cannot access download tool {}".format(self._tool))
 
     def download(self):
-        current = 0
+        current = -1
         self._report_status(current=current, complete=len(self._links))
 
         for link in self._links:
+            current += 1
+            self._report_status(current=current, complete=len(self._links))
+
             command = [self._tool,
                        link,
                        '--console-log-level=error',
@@ -30,9 +34,6 @@ class Downloader:
             command = command + ['--dir', self._dir] if self._dir else command
 
             sp.call(command)
-            current += 1
-
-            self._report_status(current=current, complete=len(self._links))
 
     @staticmethod
     def _report_status(current: int, complete: int) -> None:
