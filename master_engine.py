@@ -82,8 +82,19 @@ class MasterEngine:
         self._log_minion.debug("M3U8 content Encrypted: {}".format(self._encrypted))
         return m3u_dict
 
-    def feed_key(self, key_url: str):
-        self._args_parsed.key_url = key_url
+    def _parse_key(self, prefix: str, key_uri: str) -> bytes:
+        """
+        Parsing the key bytes from the URL (prefix+key_uri) and return it
+        :param prefix: prefix of key URL
+        :param key_uri: the suffix of key URL
+        :return: decryption key in bytes if encryption is detected else None
+        """
+        if self._encrypted and not self._m3u_dict.get('enc').get('uri'):
+            self._log_minion.error(
+                msg="abort: Files in M3U8 are encrypted but cannot access key uri")
+            exit(1)
+
+        return self._fet_minion.fetch_key(key_url=prefix + key_uri) if self._encrypted else None
 
     def feed_out_name(self, out_name: str):
         self._args_parsed.output_name = out_name
