@@ -118,12 +118,15 @@ class MasterEngine:
             links=[prefix + link for link in self._m3u_dict.get('links')],
             out_dir=out_dir)
 
-        self._dow_minion = Downloader(links=urls, out_dir=self._out_dir)
-        self._dow_minion.download()
+    def _finish_up(self, out_dir: str, final_name: str, key_bytes: bytes) -> None:
 
-    def finishing(self, encryption_method: str=None):
+        downloaded_files = self._collect_file_names(out_dir=out_dir)
+        concatenated_name = self._concatenate(in_names=downloaded_files, final_name=final_name)
+        decrypted_name = self._decrypt(cat_name=concatenated_name,
+                                       key_bytes=key_bytes,
+                                       final_name=final_name)
 
-        file_names = sp.Popen(['ls', self._out_dir], stdout=sp.PIPE)
+        self._convert(dec_name=decrypted_name, final_name=final_name)
 
         input_files = ["{}/{}".format(self._out_dir, str(name, 'utf-8'))[:-1]
                        for name in file_names.stdout.readlines()]
