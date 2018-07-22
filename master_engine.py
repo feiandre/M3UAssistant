@@ -181,9 +181,9 @@ class MasterEngine:
         self._log_minion.debug('File decrypted: {}'.format(decrypted_file_name))
         return decrypted_file_name if self._encrypted else cat_name
 
-        # Convert
-        self._alc_minion.convert(in_ts=decrypted_file_name,
-                                 out_mp4=self._out_file)
+    def _convert(self, dec_name: str, final_name: str):
+        self._alc_minion.convert(in_ts=dec_name, out_mp4=final_name)
+        self._log_minion.debug('Alrighty!')
 
 
 # Sample
