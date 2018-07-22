@@ -16,13 +16,14 @@ from typing import Dict, Any
 class Parser:
     _KEY_HEADER = '#EXT-X-KEY:'
 
-    def __init__(self, my_master):
-        self.arg_parser = ArgumentParser(
-            prog=my_master, description="parse the arguments for master engine")
+    def __init__(self, par_logger: logging.Logger) -> None:
+        """
+        Welcoming the logger assigned and prepare the command line argument parser
+        :param par_logger: the logger assigned
+        """
+        self._logger = par_logger
+        self.arg_parser = ArgumentParser(description="parses the cml arguments")
 
-        self._m3u_content = None
-        self._key_dict = None
-        self._links = []
 
     def prepare_args(self) -> ArgumentParser:
         self.arg_parser.add_argument(
