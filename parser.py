@@ -102,14 +102,18 @@ class Parser:
         self._logger.debug('enc_dict parsed: {}'.format(enc_dict))
         return enc_dict
 
-    def _parse_links(self, link_line: str) -> None:
+    def _parse_links(self, link_line: str, links: List[str]) -> None:
+        """
+        Parsing the lines containing the links to all files in M3U8 and store it to a list
+        :param link_line: the line containing links to download
+        :param links: all links parsed
+        """
         if link_line[0] == '#':
             return
-        # Partial urls
-        self._links.append(link_line)
+        self._logger.debug('Link parsed: {}'.format(link_line))
+        links.append(link_line)
 
 
-        self._key_dict = re.match(key_pattern, key_line).groupdict()
 
     @staticmethod
     def parse_key_file(key_content_bytes: bytes):
