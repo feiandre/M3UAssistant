@@ -146,8 +146,19 @@ class MasterEngine:
         self._log_minion.debug('Downloaded Files: {}'.format(downloaded_files))
         return downloaded_files
 
+    def _concatenate(self, in_names: List[str], final_name: str) -> str:
+        """
+        Concatenating all .ts files into one
+        :param in_names: the names of all .ts files
+        :param final_name: the final name in .mp4
+        :return: the name of the concatenated file
+        """
+        concatenated_name = '{}_en.ts'.format(final_name[:-4]) if self._encrypted else \
+            '{}'.format(final_name[:-4])
 
-        # print("Files = {}".format(input_files))
+        self._alc_minion.concatenate(input_files=in_names, concatenated_name=concatenated_name)
+        self._log_minion.debug('File concatenated: {}'.format(concatenated_name))
+        return concatenated_name
 
         # Concatenate
         self._alc_minion = Allocator(input_files=input_files)
