@@ -67,7 +67,20 @@ class MasterEngine:
         self._download(prefix=m3u_prefix, out_dir=out_dir)
         self._finish_up(out_dir=out_dir, final_name=out_file, key_bytes=key_bytes)
 
-        return self._m3u_dict
+    def _parse_m3u(self, m3u_url: str) -> Dict[str, List[str]]:
+        """
+        Scrape, parse and store the content of M3U file indicated by the m3u_url into a dictionary
+        detect if it is encrypted
+        :param m3u_url: the url to the m3u file
+        :return: the content of M3U file in a Dictionary
+        """
+        m3u_bytes = self._fet_minion.fetch_m3u(m3u_url=m3u_url)
+        m3u_dict = self._par_minion.parse_m3u(contents_bytes=m3u_bytes)
+        self._encrypted = m3u_dict.get('enc') is not None
+
+        self._log_minion.debug('M3U parsed: {}'.format(m3u_dict))
+        self._log_minion.debug("M3U8 content Encrypted: {}".format(self._encrypted))
+        return m3u_dict
 
     def feed_key(self, key_url: str):
         self._args_parsed.key_url = key_url
