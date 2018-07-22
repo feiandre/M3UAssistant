@@ -24,8 +24,11 @@ class Parser:
         self._logger = par_logger
         self.arg_parser = ArgumentParser(description="parses the cml arguments")
 
-
-    def prepare_args(self) -> ArgumentParser:
+    def parse_args(self) -> Namespace:
+        """
+        parsing arguments and return them
+        :return: the arguments in a Namespace
+        """
         self.arg_parser.add_argument(
             'm3u_url', nargs=1, type=str,
             help="the url to the .m3u file, e.g. http://sample.m3u")
@@ -43,7 +46,7 @@ class Parser:
             '--verbose', '-V', metavar='debug', nargs='?', type=str,
             help="Whether to print out the notifications")
 
-        return self.arg_parser
+        return args
 
     def parse_m3u(self, m3u_content_bytes: bytes) -> Dict[str, Any]:
 

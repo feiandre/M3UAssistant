@@ -54,7 +54,7 @@ class MasterEngine:
         """
         Parses M3U, downloads all files and convert to one playable MP4 file
         """
-        args = self._par_minion.prepare_args()
+        args = self._par_minion.parse_args()
         m3u_url = args.m3u_url[0]
         m3u_prefix = args.m3u_prefix[0]
         out_file = args.output_name
