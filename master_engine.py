@@ -119,7 +119,12 @@ class MasterEngine:
             out_dir=out_dir)
 
     def _finish_up(self, out_dir: str, final_name: str, key_bytes: bytes) -> None:
-
+        """
+        Finish up by combining the files, decrypting and converting to MP4
+        :param out_dir: the output directory
+        :param final_name: the final MP4 name
+        :param key_bytes: the decryption key
+        """
         downloaded_files = self._collect_file_names(out_dir=out_dir)
         concatenated_name = self._concatenate(in_names=downloaded_files, final_name=final_name)
         decrypted_name = self._decrypt(cat_name=concatenated_name,
