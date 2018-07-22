@@ -61,7 +61,8 @@ class MasterEngine:
         out_dir = re.match("(.*)/(.*).mp4", out_file).group(1)
 
         self._m3u_dict = self._parse_m3u(m3u_url=m3u_url)
-        key_bytes = self._parse_key(prefix=m3u_prefix, key_uri=self._m3u_dict.get('enc').get('uri'))
+        key_bytes = self._parse_key(prefix=m3u_prefix,
+                                    key_uri=self._m3u_dict.get('enc').get('uri').strip('"'))
         self._check_tools(args=args)
         self._download(prefix=m3u_prefix, out_dir=out_dir)
         self._finish_up(out_dir=out_dir, final_name=out_file, key_bytes=key_bytes)
