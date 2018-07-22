@@ -71,21 +71,28 @@ class Parser:
 
         return args
 
-    def parse_m3u(self, m3u_content_bytes: bytes) -> Dict[str, Any]:
+    def parse_m3u(self, contents_bytes: bytes) -> Dict[str, Any]:
+        """
+        parsing the byte content of the M3U8 file to a dictionary
+        :param contents_bytes: the content of M3U8 in bytes
+        :return: the dictionary containing info of M3U8
+        """
+        enc_dict, links = {}, []
+        content_list = str(contents_bytes, 'utf-8').split('\n')
 
-        self._m3u_content = str(m3u_content_bytes, 'utf-8').split('\n')
-
-        for line in self._m3u_content:
-            if not line:
+        for content in content_list:
+            if not content:
                 continue
+            if self._KEY_HEADER in content:
+                enc_dict = self._parse_key_uri(key_line=content)
 
-            if not self._key_dict and (self._KEY_HEADER in line):
-                # Encrypted, start from this line with key info
-                self._parse_key_uri(key_line=line)
+            self._parse_links(link_line=content, links=links)
 
-            self._parse_links(link_line=line)
+        self._logger.debug("M3U8 Links = {links}\nM3U8 Enc_dict={enc_dict}"
+                           .format(links=links, enc_dict=enc_dict))
 
-        return {'links': self._links, 'key': self._key_dict}
+        return {'links': links, 'enc': enc_dict}
+
 
     def _parse_links(self, link_line: str) -> None:
         if link_line[0] == '#':
