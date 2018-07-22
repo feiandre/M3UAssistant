@@ -5,6 +5,7 @@ concatenate them
 """
 
 import logging
+import re
 import subprocess as sp
 import sys
 from argparse import Namespace
@@ -49,9 +50,21 @@ class MasterEngine:
         self._dec_minion = Decrypter(dec_logger=self._log_minion)
         self._alc_minion = Allocator(alc_logger=self._log_minion)
 
-        # Parse m3u
-        self._m3u_dict = self._par_minion.parse_m3u(
-            m3u_content_bytes=content_bytes)
+    def assist(self) -> None:
+        """
+        Parses M3U, downloads all files and convert to one playable MP4 file
+        """
+        args = self._par_minion.prepare_args()
+        m3u_url = args.m3u_url[0]
+        m3u_prefix = args.m3u_prefix[0]
+        out_file = args.output_name
+        out_dir = re.match("(.*)/(.*).mp4", out_file).group(1)
+
+        self._m3u_dict = self._parse_m3u(m3u_url=m3u_url)
+        key_bytes = self._parse_key(prefix=m3u_prefix, key_uri=self._m3u_dict.get('enc').get('uri'))
+        self._check_tools(args=args)
+        self._download(prefix=m3u_prefix, out_dir=out_dir)
+        self._finish_up(out_dir=out_dir, final_name=out_file, key_bytes=key_bytes)
 
         return self._m3u_dict
 
@@ -102,6 +115,4 @@ class MasterEngine:
 # Sample
 if __name__ == '__main__':
     master = MasterEngine()
-    master.preparing()
-    master.downloading(urls=['http://sample01.ts', 'http://sample02.ts'])
-    master.finishing()
+    master.assist()
