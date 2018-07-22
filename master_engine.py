@@ -133,8 +133,19 @@ class MasterEngine:
 
         self._convert(dec_name=decrypted_name, final_name=final_name)
 
-        input_files = ["{}/{}".format(self._out_dir, str(name, 'utf-8'))[:-1]
-                       for name in file_names.stdout.readlines()]
+    def _collect_file_names(self, out_dir: str) -> List[str]:
+        """
+        Collecting the names of the downloaded .ts files
+        :param out_dir: output directory, where the .ts files are stored
+        :return: the names of the .ts files
+        """
+        file_names = sp.Popen(['ls', out_dir], stdout=sp.PIPE)
+
+        downloaded_files = ["{}/{}".format(out_dir, str(name, 'utf-8'))[:-1]
+                            for name in file_names.stdout.readlines()]
+        self._log_minion.debug('Downloaded Files: {}'.format(downloaded_files))
+        return downloaded_files
+
 
         # print("Files = {}".format(input_files))
 
