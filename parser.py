@@ -1,6 +1,11 @@
-# parse links/key info from .m3u response bytes,
-# parse      key bytes from .key response bytes,
-# parse arguments
+"""
+A parser that is responsible of:
+1. parse command line arguments,
+2. parse links/key info from the bytes of responded .m3u,
+3. parse key bytes from the the bytes of responded .key
+"""
+
+import logging
 import re
 import requests
 
