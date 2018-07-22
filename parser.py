@@ -86,7 +86,7 @@ class Parser:
             if not content:
                 continue
             if self._KEY_HEADER in content:
-                enc_dict = self._parse_key_uri(key_line=content)
+                enc_dict = self._parse_key_line(key_line=content)
 
             self._parse_links(link_line=content, links=links)
 
@@ -95,7 +95,12 @@ class Parser:
 
         return {'links': links, 'enc': enc_dict}
 
-    def _parse_key_uri(self, key_line: str) -> Dict[str, str]:
+    def _parse_key_line(self, key_line: str) -> Dict[str, str]:
+        """
+        Parsing the line containing key information and return the information in a dictionary
+        :param key_line: the line containing key info
+        :return: the dictionary of key and other info might be useful for decryption
+        """
         enc_pattern = self._ENC_PATTERN_2 if 'IV' in key_line else self._ENC_PATTERN_1
 
         enc_dict = re.match(enc_pattern, key_line).groupdict()
