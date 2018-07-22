@@ -15,6 +15,8 @@ from typing import Dict, Any
 
 class Parser:
     _KEY_HEADER = '#EXT-X-KEY:'
+    _ENC_PATTERN_1 = r'#EXT-X-KEY:METHOD=(?P<method>.*),URI=(?P<uri>.*)'
+    _ENC_PATTERN_2 = r'#EXT-X-KEY:METHOD=(?P<method>.*),URI=(?P<uri>.*),IV=(?P<iv>.+)'
 
     def __init__(self, par_logger: logging.Logger) -> None:
         """
@@ -93,6 +95,12 @@ class Parser:
 
         return {'links': links, 'enc': enc_dict}
 
+    def _parse_key_uri(self, key_line: str) -> Dict[str, str]:
+        enc_pattern = self._ENC_PATTERN_2 if 'IV' in key_line else self._ENC_PATTERN_1
+
+        enc_dict = re.match(enc_pattern, key_line).groupdict()
+        self._logger.debug('enc_dict parsed: {}'.format(enc_dict))
+        return enc_dict
 
     def _parse_links(self, link_line: str) -> None:
         if link_line[0] == '#':
@@ -100,13 +108,6 @@ class Parser:
         # Partial urls
         self._links.append(link_line)
 
-    def _parse_key_uri(self, key_line: str):
-        key_pattern = r'#EXT-X-KEY:METHOD=(?P<method>.*),' \
-                      r'URI=(?P<uri>.*),' \
-                      r'IV=(?P<iv>.+)' \
-            if 'IV' in key_line else \
-            r'#EXT-X-KEY:METHOD=(?P<method>.*),' \
-            r'URI=(?P<uri>.*),'
 
         self._key_dict = re.match(key_pattern, key_line).groupdict()
 
