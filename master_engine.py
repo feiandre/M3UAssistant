@@ -96,8 +96,17 @@ class MasterEngine:
 
         return self._fet_minion.fetch_key(key_url=prefix + key_uri) if self._encrypted else None
 
-    def feed_out_name(self, out_name: str):
-        self._args_parsed.output_name = out_name
+    def _check_tools(self, args: Namespace) -> None:
+        """
+        Checking if all tools are available
+        :param args:
+        :return:
+        """
+        self._dow_minion.check_tool(tool=args.dow_tool[0] if args.dow_tool else 'aria2c')
+        self._alc_minion.check_tool(conversion_tool=args.cov_tool[0] if args.cov_tool else 'ffmpeg',
+                                    concatenation_tool=args.cat_tool[0] if args.cat_tool else 'cat')
+        if self._encrypted:
+            self._dec_minion.check_tool(tool=args.dec_method[0] if args.dec_tool else 'openssl')
 
     def downloading(self, urls: List[str]):
         if self._m3u_dict['key'] and not self._args_parsed.key_url:
