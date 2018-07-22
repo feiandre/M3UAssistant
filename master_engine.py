@@ -1,11 +1,21 @@
-import re
+"""
+The Master Engine of M3UAssistant, arrange minions to
+download M3U file, read content, download all files inside, decrypt them if necessary and
+concatenate them
+"""
+
+import logging
 import subprocess as sp
-from fetcher import Fetcher
-from parser import Parser
-from downloader import Downloader
-from decrypter import Decrypter
-from allocator import Allocator
-from typing import List, Dict, Any
+import sys
+from argparse import Namespace
+from logging import Logger
+from typing import List, Dict
+
+from .allocator import Allocator
+from .decrypter import Decrypter
+from .downloader import Downloader
+from .fetcher import Fetcher
+from .parser import Parser
 
 
 class MasterEngine:
