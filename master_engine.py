@@ -99,8 +99,7 @@ class MasterEngine:
     def _check_tools(self, args: Namespace) -> None:
         """
         Checking if all tools are available
-        :param args:
-        :return:
+        :param args: args parsed, may contain specified tools
         """
         self._dow_minion.check_tool(tool=args.dow_tool[0] if args.dow_tool else 'aria2c')
         self._alc_minion.check_tool(conversion_tool=args.cov_tool[0] if args.cov_tool else 'ffmpeg',
