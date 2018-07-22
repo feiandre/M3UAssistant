@@ -107,10 +107,16 @@ class MasterEngine:
         if self._encrypted:
             self._dec_minion.check_tool(tool=args.dec_method[0] if args.dec_tool else 'openssl')
 
-    def downloading(self, urls: List[str]):
-        if self._m3u_dict['key'] and not self._args_parsed.key_url:
-            exit("Abort: The .ts files are encrypted, "
-                 "please ensure you have feed the key before downloading")
+    def _download(self, prefix: str, out_dir: str = None) -> None:
+        """
+        Start downloading files indicated by (prefix + M3U8_URLs)
+        :param prefix: prefix of URLs in M3U8
+        :param out_dir: output directory
+        :return:
+        """
+        self._dow_minion.download(
+            links=[prefix + link for link in self._m3u_dict.get('links')],
+            out_dir=out_dir)
 
         self._dow_minion = Downloader(links=urls, out_dir=self._out_dir)
         self._dow_minion.download()
