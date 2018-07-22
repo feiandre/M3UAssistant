@@ -20,31 +20,34 @@ from .parser import Parser
 
 class MasterEngine:
 
-    _Master_Name = 'M3U Assistant'
-
-    def __init__(self, args=None):
-
-        self._par_minion = Parser(my_master=self._Master_Name)
-        self._fet_minion = Fetcher()
-        self._dow_minion = None
-        self._dec_minion = None
-        self._alc_minion = None
-
+    def __init__(self) -> None:
+        """
+        Prepare the minions, the dictionary for the content of M3U8 and an indicator of encryption
+        """
+        self._prepare_minions()
         self._m3u_dict = {}
-        # parse args
-        if args:
-            self._args_parsed = args
-        else:
-            all_args = self._par_minion.prepare_args()
-            self._args_parsed = all_args.parse_args()
-        self._out_file = self._args_parsed.output_name
-        self._out_dir = re.match("(.*)/(.*).mp4",
-                                 self._out_file).group(1)
+        self._encrypted = False
 
-    def preparing(self) -> Dict[str, Any]:
-        # Fetch m3u
-        content_bytes = self._fet_minion.fetch_m3u(
-            m3u_url=self._args_parsed.m3u_url[0])
+    @staticmethod
+    def _prepare_logger() -> Logger:
+        """
+        Create a logger minion that will print messages via stdout
+        :return: logger
+        """
+        logger = logging.getLogger(__name__)
+        logger.addHandler(logging.StreamHandler(sys.stdout))
+        return logger
+
+    def _prepare_minions(self) -> None:
+        """
+        Call out the minions and send logger minion to monitor
+        """
+        self._log_minion = self._prepare_logger()
+        self._par_minion = Parser(par_logger=self._log_minion)
+        self._fet_minion = Fetcher(fet_logger=self._log_minion)
+        self._dow_minion = Downloader(dow_logger=self._log_minion)
+        self._dec_minion = Decrypter(dec_logger=self._log_minion)
+        self._alc_minion = Allocator(alc_logger=self._log_minion)
 
         # Parse m3u
         self._m3u_dict = self._par_minion.parse_m3u(
