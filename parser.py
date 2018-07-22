@@ -34,17 +34,40 @@ class Parser:
             help="the url to the .m3u file, e.g. http://sample.m3u")
 
         self.arg_parser.add_argument(
-            '--key_url', '-K', metavar='key_url', nargs='?', type=str,
-            help="the url to the .key file, e.g. http://sample.key")
+            '--m3u_prefix', '-P', nargs=1, type=str,
+            help="the prefix of each url in the .m3u file")
 
         self.arg_parser.add_argument(
-            '--output_name', '-O', metavar='out', nargs='?', type=str,
-            default='./mp4/out.mp4',
-            help="the dir and the name of the output file, e.g. ./mp4/out.mp4")
+            '--dow_tool', '-W', nargs='?', type=str,
+            help="the tool for downloading, e.g. aria2c, which will be used as default")
 
         self.arg_parser.add_argument(
-            '--verbose', '-V', metavar='debug', nargs='?', type=str,
-            help="Whether to print out the notifications")
+            '--dec_tool', '-D', nargs='?', type=str,
+            help="the tool for decryption, e.g. openssl, which will be used as default")
+
+        self.arg_parser.add_argument(
+            '--cov_tool', '-C', nargs='?', type=str,
+            help="the tool to convert .ts files to the ideal format, "
+                 "e.g. FFmpeg, which will be used as default")
+
+        self.arg_parser.add_argument(
+            '--cat_tool', '-T', nargs='?', type=str,
+            help="tthe tool to concat all fragment files in M3U8 to one, "
+                 "e.g. cat, which will be used as default")
+
+        self.arg_parser.add_argument(
+            '--output_name', '-O', nargs='?', type=str,
+            default='./out/out.mp4',
+            help="the path to the output MP4 file, e.g. ./out/out.mp4")
+
+        self.arg_parser.add_argument(
+            '--verbose', '-V', nargs='?', type=bool,
+            default=False,
+            help="Whether to print out the logging messages")
+
+        args = self.arg_parser.parse_args()
+        self._logger.setLevel(level=logging.DEBUG if args.verbose else logging.WARN)
+        self._logger.debug('Arguments parsed: {}'.format(args))
 
         return args
 
