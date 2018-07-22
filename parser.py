@@ -7,10 +7,9 @@ A parser that is responsible of:
 
 import logging
 import re
-import requests
-
-from argparse import ArgumentParser
-from typing import Dict, Any
+import sys
+from argparse import ArgumentParser, Namespace
+from typing import List, Dict, Any
 
 
 class Parser:
@@ -127,8 +126,9 @@ class Parser:
 
 # Sample
 if __name__ == '__main__':
-    request_url = "http://sample.m3u8"
-    response = requests.get(url=request_url)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
 
-    minion = Parser(my_master="Master")
-    print(minion.parse_m3u(m3u_content_bytes=response.content))
+    minion = Parser(par_logger=logger)
+    print(minion.parse_m3u(contents_bytes=b'Test\n'))
