@@ -160,21 +160,26 @@ class MasterEngine:
         self._log_minion.debug('File concatenated: {}'.format(concatenated_name))
         return concatenated_name
 
-        # Concatenate
-        self._alc_minion = Allocator(input_files=input_files)
-        concatenated_name = self._alc_minion.concatenate(
-            out_name=self._out_file)
+    def _decrypt(self, cat_name: str, key_bytes: bytes, final_name: str) -> str:
+        """
+        Decrypting the co concatenated if it is encrypted
+        :param cat_name: the name of the concatenated file
+        :param key_bytes: the encryption key in bytes
+        :param final_name: the final name in .mp4
+        :return: the name of the decrypted file
+        """
+        decrypted_file_name = final_name[:-3] + 'ts'
 
-        # Decrypt
-        key_bytes = self._fet_minion.fetch_key(self._args_parsed.key_url)
+        if self._encrypted:
+            self._dec_minion.decrypt(
+                iv=self._m3u_dict.get('enc').get('iv')[2:],
+                key_bytes=key_bytes,
+                encrypted_file=cat_name,
+                out_name=decrypted_file_name,
+                encryption_method=self._m3u_dict.get('enc').get('method').lower() + '-cbc')
 
-        iv = self._m3u_dict['key']['iv']
-        decrypted_file_name = self._out_file[:-3]+'ts'
-        self._dec_minion = Decrypter(key=key_bytes, iv=iv,
-                                     encrypted_file=concatenated_name,
-                                     decrypted_file=decrypted_file_name,
-                                     encryption_method=encryption_method)
-        self._dec_minion.decrypt()
+        self._log_minion.debug('File decrypted: {}'.format(decrypted_file_name))
+        return decrypted_file_name if self._encrypted else cat_name
 
         # Convert
         self._alc_minion.convert(in_ts=decrypted_file_name,
