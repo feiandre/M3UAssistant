@@ -15,3 +15,42 @@ M3UAssistant is designed to address this problem by:
 3. Concatenate fragments into one TS file
 4. Decrypt the TS file
 5. Convert the decrypted file to MP4, which can be recognised by all most all video player
+
+
+## Dependencies
+Unfortunately, all of the following dependencies are required for now.
+In the short (hopefully) future, I will add the options of replacing them with other ones you would like to use.
+
+However, hey, it is always nice to have a try on the following ones on this or other occasions if you haven't : )
+
+### Built-in dependencies
+
+Hopefully, your computer already has the tool for concatenation: [`cat`](http://www.linfo.org/cat.html)
+
+### pip3 dependencies
+
+```bash
+pip3 install -r requirements.txt
+```
+
+### Other dependencies
+
+The following dependencies can be installed via [`HomeBrew`](https://brew.sh/):
+
+* For downloading: [`aria2c`](https://aria2.github.io/):
+```bash
+brew install aria2c
+```
+
+* For decryption: [`OpenSSL`](https://www.openssl.org/):
+
+```bash
+brew install openssl
+```
+
+* For video conversion: [`FFmpeg`](https://www.ffmpeg.org/)
+```bash
+brew install ffmpeg
+```
+
+If you are not a `macOS` user, then good luck on finding them via your own package manager :P
