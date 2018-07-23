@@ -3,11 +3,13 @@ Downloader is responsible of downloading the links specified in the .m3u file to
 Multi-threads are used to save time, pool size is 8 by default
 """
 
+
+import sys
+import logging
+import threadpool
 import subprocess as sp
 
 from typing import List
-
-import threadpool
 
 from .bcolours import BColours
 
@@ -88,11 +90,13 @@ class Downloader:
         sys.stdout.flush()
 
 
-# Sample
+# Demo
 if __name__ == '__main__':
-    minion = Downloader(
-        links=['https://get.videolan.org/vlc/2.2.6/macosx/vlc-2.2.6.dmg',
-               'https://get.videolan.org/vlc/2.2.6/macosx/vlc-2.2.6.dmg',
-               'https://get.videolan.org/vlc/2.2.6/macosx/vlc-2.2.6.dmg'])
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+    minion = Downloader(logger)
 
-    minion.download()
+    minion.download(links=['https://get.videolan.org/vlc/2.2.6/macosx/vlc-2.2.6.dmg',
+                           'https://get.videolan.org/vlc/2.2.6/macosx/vlc-2.2.6.dmg',
+                           'https://get.videolan.org/vlc/2.2.6/macosx/vlc-2.2.6.dmg'])
