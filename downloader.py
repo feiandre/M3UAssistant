@@ -70,6 +70,12 @@ class Downloader:
 
     @staticmethod
     def _report_status(current: int, complete: int) -> None:
+        """
+        report the status of downloading,
+        e.g. count of downloaded file and percentage of completion
+        :param current: current count of file downloaded
+        :param complete: total number of files to download
+        """
         if not current:
             sys.stdout.write(BColours.HEADER
                              + 'Download started: Downloading {} items\n'.format(complete)
@@ -77,8 +83,7 @@ class Downloader:
             return
 
         if current == complete:
-            sys.stdout.write(
-                'Download completed: Downloaded {} items\n'.format(complete))
+            sys.stdout.write('Download completed: Downloaded {} items\n'.format(complete))
             return
 
         sys.stdout.write('Downloading ...'
