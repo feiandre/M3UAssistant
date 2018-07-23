@@ -7,6 +7,8 @@ import subprocess as sp
 
 from typing import List
 
+import threadpool
+
 from .bcolours import BColours
 
 
@@ -34,22 +36,35 @@ class Downloader:
             exit(2)
         self._tool = tool
 
-    def download(self):
-        current = -1
-        self._report_status(current=current, complete=len(self._links))
+    def download(self, links: List[str], out_dir: str = None) -> None:
+        """
+        Download the given links to output directory
+        :param links: the links to the file to download
+        :param out_dir: the output directory
+        """
+        self._out_dir, self._ttl_num = out_dir, len(links)
 
-        for link in self._links:
-            current += 1
-            self._report_status(current=current, complete=len(self._links))
+        download_requests = threadpool.makeRequests(self._download_thread, links)
+        [self._pool.putRequest(req) for req in download_requests]
+        self._pool.wait()
+        print("Download complete")
 
-            command = [self._tool,
-                       link,
-                       '--console-log-level=error',
-                       '--download-result=hide',
-                       '--show-console-readout', 'false']
-            command = command + ['--dir', self._dir] if self._dir else command
+    def _download_thread(self, link) -> None:
+        """
+        The download process for each thread, assuming using aria2c for now,
+        keep reporting status
+        :param link: the link to download from
+        """
+        self._report_status(current=self._crr_num, complete=self._ttl_num)
+        command = '{} {}' \
+                  ' --console-log-level=error' \
+                  ' --download-result=hide' \
+                  ' --show-console-readout false'.format(self._tool, link)
+        if self._out_dir:
+            command += ' --dir {}'.format(self._out_dir)
 
-            sp.call(command)
+        sp.call(command.split())
+        self._crr_num += 1
 
     @staticmethod
     def _report_status(current: int, complete: int) -> None:
