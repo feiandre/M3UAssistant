@@ -3,8 +3,10 @@ from typing import List
 from bcolors import BColors
 
 import subprocess as sp
-import sys
-import os
+
+from typing import List
+
+from .bcolours import BColours
 
 
 class Downloader:
@@ -38,10 +40,9 @@ class Downloader:
     @staticmethod
     def _report_status(current: int, complete: int) -> None:
         if not current:
-            sys.stdout.write(
-                BColors.HEADER
-                + 'Download started: Downloading {} items\n'.format(complete)
-                + BColors.END_COLOR)
+            sys.stdout.write(BColours.HEADER
+                             + 'Download started: Downloading {} items\n'.format(complete)
+                             + BColours.END_COLOR)
             return
 
         if current == complete:
@@ -49,12 +50,12 @@ class Downloader:
                 'Download completed: Downloaded {} items\n'.format(complete))
             return
 
-        sys.stdout.write(
-            'Downloading ...'
-            + BColors.GREEN
-            + '{:.2f}%'.format(current/complete*100)
-            + BColors.END_COLOR
-            + '({} items)\r'.format(current))
+        sys.stdout.write('Downloading ...'
+                         + BColours.GREEN
+                         + '{:.2f}%'.format(current / complete * 100)
+                         + BColours.END_COLOR
+                         + '({} items)\r'.format(current))
+
         sys.stdout.flush()
 
 
