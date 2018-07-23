@@ -12,10 +12,17 @@ from .bcolours import BColours
 
 class Downloader:
 
-    def __init__(self, links: List[str], out_dir: str=None, tool: str='aria2c'):
-        self._links = links
-        self._tool = tool
-        self._dir = out_dir
+    def __init__(self, dow_logger: logging.Logger, pool_size: int = 8) -> None:
+        """
+        Welcoming the logger assigned, prepare thread pool,
+        and create several place holder for class variables
+        :param dow_logger: the logger assigned
+        :param pool_size: the size of the thread pool
+        """
+        self._logger = dow_logger
+        self._pool = threadpool.ThreadPool(pool_size)
+        self._crr_num = self._ttl_num = 0
+        self._tool = self._out_dir = None
 
     def _check_tool(self) -> None:
         if sp.call(['which', self._tool], stdout=sp.DEVNULL):
