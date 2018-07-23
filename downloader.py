@@ -24,9 +24,15 @@ class Downloader:
         self._crr_num = self._ttl_num = 0
         self._tool = self._out_dir = None
 
-    def _check_tool(self) -> None:
-        if sp.call(['which', self._tool], stdout=sp.DEVNULL):
-            exit("abort: Cannot access download tool {}".format(self._tool))
+    def check_tool(self, tool: str) -> None:
+        """
+        Checking if the download tool is available
+        :param tool: the tool assigned for downloading
+        """
+        if sp.call(['which', tool], stdout=sp.DEVNULL):
+            self._logger.error("abort: Cannot access download tool {}".format(tool))
+            exit(2)
+        self._tool = tool
 
     def download(self):
         current = -1
