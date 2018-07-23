@@ -27,7 +27,7 @@ class Parser:
 
     def parse_args(self) -> Namespace:
         """
-        parsing arguments and return them
+        Parsing arguments and return them
         :return: the arguments in a Namespace
         """
         self.arg_parser.add_argument(
@@ -39,24 +39,6 @@ class Parser:
             help="the prefix of each url in the .m3u file")
 
         self.arg_parser.add_argument(
-            '--dow_tool', '-W', nargs='?', type=str,
-            help="the tool for downloading, e.g. aria2c, which will be used as default")
-
-        self.arg_parser.add_argument(
-            '--dec_tool', '-D', nargs='?', type=str,
-            help="the tool for decryption, e.g. openssl, which will be used as default")
-
-        self.arg_parser.add_argument(
-            '--cov_tool', '-C', nargs='?', type=str,
-            help="the tool to convert .ts files to the ideal format, "
-                 "e.g. FFmpeg, which will be used as default")
-
-        self.arg_parser.add_argument(
-            '--cat_tool', '-T', nargs='?', type=str,
-            help="tthe tool to concat all fragment files in M3U8 to one, "
-                 "e.g. cat, which will be used as default")
-
-        self.arg_parser.add_argument(
             '--output_name', '-O', nargs='?', type=str,
             default='./out/out.mp4',
             help="the path to the output MP4 file, e.g. ./out/out.mp4")
@@ -66,6 +48,28 @@ class Parser:
             default=False,
             help="Whether to print out the logging messages")
 
+        self.arg_parser.add_argument(
+            '--dow_tool', '-W', nargs='?', type=str,
+            help="Coming soon: "
+                 "the tool for downloading, e.g. aria2c, which will be used as default")
+
+        self.arg_parser.add_argument(
+            '--dec_tool', '-D', nargs='?', type=str,
+            help="Coming soon: "
+                 "the tool for decryption, e.g. openssl, which will be used as default")
+
+        self.arg_parser.add_argument(
+            '--cov_tool', '-C', nargs='?', type=str,
+            help="Coming soon: "
+                 "the tool to convert .ts files to the ideal format, "
+                 "e.g. FFmpeg, which will be used as default")
+
+        self.arg_parser.add_argument(
+            '--cat_tool', '-T', nargs='?', type=str,
+            help="Coming soon: "
+                 "the tool to concat all fragment files in M3U8 to one, "
+                 "e.g. cat, which will be used as default")
+
         args = self.arg_parser.parse_args()
         self._logger.setLevel(level=logging.DEBUG if args.verbose else logging.WARN)
         self._logger.debug('Arguments parsed: {}'.format(args))
@@ -74,7 +78,7 @@ class Parser:
 
     def parse_m3u(self, contents_bytes: bytes) -> Dict[str, Any]:
         """
-        parsing the byte content of the M3U8 file to a dictionary
+        Parsing the byte content of the M3U8 file to a dictionary
         :param contents_bytes: the content of M3U8 in bytes
         :return: the dictionary containing info of M3U8
         """
@@ -118,13 +122,7 @@ class Parser:
         links.append(link_line)
 
 
-
-    @staticmethod
-    def parse_key_file(key_content_bytes: bytes):
-        return str(key_content_bytes, 'utf-8')
-
-
-# Sample
+# Demo
 if __name__ == '__main__':
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
