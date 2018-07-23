@@ -54,3 +54,26 @@ brew install ffmpeg
 ```
 
 If you are not a `macOS` user, then good luck on finding them via your own package manager :P
+
+
+## Demo
+
+Here is a demo on how to use this *assistant*:
+
+1. `cd` to the **parent** directory of `M3UAssistant`,
+2. Run with `Python3`:
+```bash
+python3 -m M3UAssistant.master_engine <target_m3u_url> -P <m3u_prefix> -O <output_name.mp4>
+```
+where:
+
+1. `target_m3u_url` is the URL to the M3U file to parse
+2. `m3u_prefix` is the prefix that should be added to each TS fragment URI in the M3U file to complete a full URL.
+Usually M3U will omit this prefix, but Normally you can identify it easily by checking out the full address of TS fragments in your browser.
+3. `output_name.mp4` the name of the final output, as indicated by its name, it should end with `.mp4`
+
+### Optional arguments:
+
+1. `--help, -h`, showing the help message and exit
+2. `--verbose True|False` or `-V True|False`, indicating whether to print out the debug messages
+3. `--*_tool`,  indicating whether to replace the default tools, coming soon
