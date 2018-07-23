@@ -1,6 +1,7 @@
-# download the links specified in the .m3u file to out_dir with aria2c
-from typing import List
-from bcolors import BColors
+"""
+Downloader is responsible of downloading the links specified in the .m3u file to out_dir with aria2c
+Multi-threads are used to save time, pool size is 8 by default
+"""
 
 import subprocess as sp
 
