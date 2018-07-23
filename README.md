@@ -37,18 +37,18 @@ pip3 install -r requirements.txt
 
 The following dependencies can be installed via [`HomeBrew`](https://brew.sh/):
 
-* For downloading: [`aria2c`](https://aria2.github.io/):
+* [`aria2c`](https://aria2.github.io/) For downloading:
 ```bash
 brew install aria2c
 ```
 
-* For decryption: [`OpenSSL`](https://www.openssl.org/):
+* [`OpenSSL`](https://www.openssl.org/) For decryption:
 
 ```bash
 brew install openssl
 ```
 
-* For video conversion: [`FFmpeg`](https://www.ffmpeg.org/)
+* [`FFmpeg`](https://www.ffmpeg.org/) For video conversion:
 ```bash
 brew install ffmpeg
 ```
