@@ -186,7 +186,10 @@ class MasterEngine:
         self._log_minion.debug('Alrighty!')
 
 
-# Sample
+# Demo
 if __name__ == '__main__':
+    """
+    Check out README.md for demo
+    """
     master = MasterEngine()
     master.assist()
