@@ -27,10 +27,16 @@ class Fetcher:
         self._logger.debug('M3U8 content: {}'.format(m3u_content))
         return m3u_content
 
-    @staticmethod
-    def fetch_key(key_url: str=None) -> bytes:
-        key_response = requests.get(url=key_url) if key_url else None
-        return key_response.content if key_response else None
+    def fetch_key(self, key_url: str=None) -> bytes:
+        """
+        Fetching the content of key and return it
+        :param key_url: the URL to key file
+        :return: the content of key in bytes
+        """
+        self._logger.debug('Key URL: {}'.format(key_url))
+        key_content = requests.get(url=key_url).content if key_url else None
+        self._logger.debug('Key content: {}'.format(key_content))
+        return key_content
 
 
 # Demo
