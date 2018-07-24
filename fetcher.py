@@ -1,4 +1,9 @@
-# Fetch m3u from url in args
+"""
+A Fetcher that is responsible of fetching (i.e. requesting) contents (e.g. M3U8, Key)
+from given URL
+"""
+
+
 import requests
 
 from typing import Dict
