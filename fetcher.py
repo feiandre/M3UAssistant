@@ -17,10 +17,15 @@ class Fetcher:
         """
         self._logger = fet_logger
 
-    @staticmethod
-    def fetch_m3u(m3u_url: str, params: Dict[str, str]=None) -> bytes:
-        m3u_response = requests.get(url=m3u_url, params=params)
-        return m3u_response.content
+    def fetch_m3u(self, m3u_url: str) -> bytes:
+        """
+        Fetching the content of M3U8 and return it
+        :param m3u_url: the URL to M3U8 file
+        :return: the content of M3U8 in bytes
+        """
+        m3u_content = requests.get(url=m3u_url).content
+        self._logger.debug('M3U8 content: {}'.format(m3u_content))
+        return m3u_content
 
     @staticmethod
     def fetch_key(key_url: str=None) -> bytes:
