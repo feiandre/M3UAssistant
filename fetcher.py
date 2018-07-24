@@ -3,15 +3,19 @@ A Fetcher that is responsible of fetching (i.e. requesting) contents (e.g. M3U8,
 from given URL
 """
 
-
+import sys
+import logging
 import requests
-
-from typing import Dict
 
 
 class Fetcher:
-    def __init__(self):
-        pass
+
+    def __init__(self, fet_logger: logging.Logger) -> None:
+        """
+        Welcoming the logger assigned
+        :param fet_logger: the logger assigned
+        """
+        self._logger = fet_logger
 
     @staticmethod
     def fetch_m3u(m3u_url: str, params: Dict[str, str]=None) -> bytes:
@@ -24,7 +28,11 @@ class Fetcher:
         return key_response.content if key_response else None
 
 
+# Demo
 if __name__ == '__main__':
-    minion = Fetcher()
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+    minion = Fetcher(logger)
     print(minion.fetch_m3u("http://sample.m3u8"))
     print(minion.fetch_key("http://sample.key"))
