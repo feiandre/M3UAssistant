@@ -16,8 +16,15 @@ class Decrypter:
         self._tool = None
         self._logger = dec_logger
 
-    def _convert_key(self) -> str:
-        return bytearray.hex(bytearray(self._crypt_key_byte))
+    def _convert_key(self, key_bytes: bytes) -> str:
+        """
+        Converting key from bytes to hex value
+        :param key_bytes: the key bytes to convert
+        :return: the converted hex in str
+        """
+        key_hex = bytearray.hex(bytearray(key_bytes))
+        self._logger.debug('key_hex = {}'.format(key_hex))
+        return key_hex
 
     def _check_tool(self) -> None:
         if sp.call(['which', self._tool], stdout=sp.DEVNULL):
