@@ -1,4 +1,7 @@
-# decrypt .ts files with openssl
+"""
+Decrypter is responsible of decrypting the concatenated .ts file with openssl
+"""
+
 import subprocess as sp
 
 
