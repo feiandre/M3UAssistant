@@ -1,22 +1,20 @@
 """
 Decrypter is responsible of decrypting the concatenated .ts file with openssl
 """
-
+import sys
+import logging
 import subprocess as sp
 
 
 class Decrypter:
 
-    def __init__(self, key: bytes, iv: str,
-                 encrypted_file: str, decrypted_file: str=None,
-                 encryption_method: str=None, tool: str='openssl'):
-        self._crypt_key_byte = key
-        self._crypt_iv = iv[2:] if "0x" == iv[:2] else iv
-        self._input = encrypted_file
-        self._output = decrypted_file if decrypted_file else 'dec.ts'
-        self._method = encryption_method if encryption_method else 'aes-128-cbc'
-        self._tool = tool
-        self._check_tool()
+    def __init__(self, dec_logger: logging.Logger) -> None:
+        """
+        Welcoming the logger assigned and create a place holder for tool
+        :param dec_logger: the logger assigned
+        """
+        self._tool = None
+        self._logger = dec_logger
 
     def _convert_key(self) -> str:
         return bytearray.hex(bytearray(self._crypt_key_byte))
