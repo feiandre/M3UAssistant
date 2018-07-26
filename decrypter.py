@@ -31,12 +31,16 @@ class Decrypter:
                  '-in', self._input, '-out', self._output])
 
 
-# Sample
+# Demo
 if __name__ == '__main__':
-    minion = Decrypter(
-        key=b'}}\x08\x90a\xaf\xe3\xfc\xfa\x9c\xd8\x15\xe6\xbb\xecC',
-        iv='519dbb1e43a0ae6659b3993d6ea0e871',
-        encrypted_file='encrypted.ts',
-        decrypted_file='decrypted.ts')
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
 
-    minion.decrypt()
+    minion = Decrypter(logger)
+
+    minion.decrypt(
+        iv='519dbb1e43a0ae6659b3993d6ea0e871',
+        key_bytes=b'}}\x08\x90a\xaf\xe3\xfc\xfa\x9c\xd8\x15\xe6\xbb\xecC',
+        out_name='decrypted.ts',
+        encrypted_file='encrypted.ts', encryption_method='AES-128')
