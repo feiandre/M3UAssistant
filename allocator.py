@@ -6,18 +6,22 @@ Allocator is responsible of:
 
 
 import os
+import sys
+import logging
 import subprocess as sp
 from typing import List
 
 
 class Allocator:
 
-    def __init__(self, input_files: List[str],
-                 conversion_tool: str='ffmpeg', concatenation_tool: str='cat'):
-        self._input = input_files
-        self._conversion_tool = conversion_tool
-        self._concatenation_tool = concatenation_tool
-        self._check_tool()
+    def __init__(self, alc_logger: logging.Logger) -> None:
+        """
+        Welcoming the logger assigned and create place holders for tools
+        :param alc_logger: the logger assigned
+        """
+        self._logger = alc_logger
+        self.cov_tool = None
+        self.cat_tool = None
 
     def _check_tool(self) -> None:
         if sp.call(['which', self._conversion_tool], stdout=sp.DEVNULL):
