@@ -1,9 +1,9 @@
 """
 Decrypter is responsible of decrypting the concatenated .ts file with openssl
 """
-import sys
 import logging
 import subprocess as sp
+import sys
 
 
 class Decrypter:
@@ -16,16 +16,6 @@ class Decrypter:
         self._tool = None
         self._logger = dec_logger
 
-    def _convert_key(self, key_bytes: bytes) -> str:
-        """
-        Converting key from bytes to hex value
-        :param key_bytes: the key bytes to convert
-        :return: the converted hex in str
-        """
-        key_hex = bytearray.hex(bytearray(key_bytes))
-        self._logger.debug('key_hex = {}'.format(key_hex))
-        return key_hex
-
     def check_tool(self, tool: str) -> None:
         """
         Checking if the tool is available
@@ -36,12 +26,39 @@ class Decrypter:
             exit(2)
         self._tool = tool
 
-    def decrypt(self) -> None:
-        crypt_key_hex = self._convert_key()
+    def decrypt(self, iv: str, key_bytes: bytes, encrypted_file: str, encryption_method: str,
+                out_name: str = None) -> None:
+        """
+        Decrypting the encrypted_file with the tool assigned and the info in params
+        :param iv: initial vector
+        :param key_bytes: decryption key
+        :param encrypted_file: the file to decrypt
+        :param encryption_method: the method in which the file is encrypted
+        :param out_name: the desired output name of the decrypted file
+        """
+        if not (key_bytes and self._tool):
+            self._logger.error(
+                "abort: Files in M3U8 are encrypted but missing key_bytes {}".format(key_bytes))
+            exit(1)
+        key_hex = self._convert_key(key_bytes=key_bytes)
+        dec_command = '{tool} {enc_method} -d -nosalt ' \
+                      '-K {key_hex} -iv {iv} -in {enc_file} -out {dec_file}' \
+            .format(tool=self._tool, enc_method=encryption_method,
+                    key_hex=key_hex, iv=iv, enc_file=encrypted_file,
+                    dec_file=out_name)
 
-        sp.call([self._tool, self._method, '-d', '-nosalt',
-                 '-K', crypt_key_hex, '-iv', self._crypt_iv,
-                 '-in', self._input, '-out', self._output])
+        sp.call(dec_command.split(' '))
+        self._logger.debug('decryption command: {}'.format(dec_command))
+
+    def _convert_key(self, key_bytes: bytes) -> str:
+        """
+        Converting key from bytes to hex value
+        :param key_bytes: the key bytes to convert
+        :return: the converted hex in str
+        """
+        key_hex = bytearray.hex(bytearray(key_bytes))
+        self._logger.debug('key_hex = {}'.format(key_hex))
+        return key_hex
 
 
 # Demo
