@@ -5,10 +5,10 @@ Allocator is responsible of:
 """
 
 
-import os
-import sys
 import logging
+import os
 import subprocess as sp
+import sys
 from typing import List
 
 
@@ -54,12 +54,15 @@ class Allocator:
         os.system(" ".join(cat_command))
 
     def convert(self, in_ts: str, out_mp4: str) -> None:
+        """
+        Converting .ts file to .mp4
+        :param in_ts: the .ts file to convert
+        :param out_mp4: the name of the converted file
+        """
+        cov_command = '{tool} -i {in_ts} -codec {codec} {out_mp4} ' \
+            .format(tool=self.cov_tool, in_ts=in_ts, codec='copy', out_mp4=out_mp4)
 
-        command = [self._conversion_tool,
-                   '-i', in_ts,
-                   '-codec', "copy",
-                   out_mp4]
-        sp.call(command)
+        sp.call(cov_command.split())
 
 
 # Demo
