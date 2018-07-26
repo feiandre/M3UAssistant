@@ -1,4 +1,10 @@
-# Optional: concatenate all .ts files to one and convert it to .mp4
+"""
+Allocator is responsible of:
+1. concatenating .ts file fragments into one, and
+2. converting .ts file to .mp4
+"""
+
+
 import os
 import subprocess as sp
 from typing import List
