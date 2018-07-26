@@ -42,18 +42,16 @@ class Allocator:
         self.cov_tool = conversion_tool
         self.cat_tool = concatenation_tool
 
-    def concatenate(self, out_name: str) -> str:
-        if len(self._input) == 1:
-            return self._input[0]
-
-        concatenated_name = '{}_en.ts'.format(out_name[:-4])
-
-        command = [self._concatenation_tool] \
-            + self._input \
-            + ['>', concatenated_name]
-
-        os.system(" ".join(command))
-        return concatenated_name
+    def concatenate(self, input_files: List[str], concatenated_name: str) -> None:
+        """
+        Concatenating the input files to one
+        :param input_files: a list of files to concatenate
+        :param concatenated_name: the name of the concatenated file
+        """
+        if len(input_files) == 1:
+            return
+        cat_command = [self.cat_tool] + input_files + ['>', concatenated_name]
+        os.system(" ".join(cat_command))
 
     def convert(self, in_ts: str, out_mp4: str) -> None:
 
