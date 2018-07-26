@@ -26,9 +26,15 @@ class Decrypter:
         self._logger.debug('key_hex = {}'.format(key_hex))
         return key_hex
 
-    def _check_tool(self) -> None:
-        if sp.call(['which', self._tool], stdout=sp.DEVNULL):
-            exit("abort: Cannot access decryption tool {}".format(self._tool))
+    def check_tool(self, tool: str) -> None:
+        """
+        Checking if the tool is available
+        :param tool: the tool assigned for decryption
+        """
+        if sp.call(['which', tool], stdout=sp.DEVNULL):
+            self._logger.error("abort: Cannot access decryption tool {}".format(tool))
+            exit(2)
+        self._tool = tool
 
     def decrypt(self) -> None:
         crypt_key_hex = self._convert_key()
