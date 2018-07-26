@@ -62,8 +62,12 @@ class Allocator:
         sp.call(command)
 
 
-# Sample
+# Demo
 if __name__ == '__main__':
-    minion = Allocator(input_files=['01.ts', '02.ts', '03.ts'])
-    name = minion.concatenate(out_name="out.ts")
-    minion.convert(in_ts=name, out_mp4="out.mp4")
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+
+    minion = Allocator(logger)
+    minion.concatenate(input_files=['01.ts', '02.ts', '03.ts'], concatenated_name="out.ts")
+    minion.convert(in_ts="out.ts", out_mp4="out.mp4")
