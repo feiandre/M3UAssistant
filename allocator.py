@@ -23,16 +23,24 @@ class Allocator:
         self.cov_tool = None
         self.cat_tool = None
 
-    def _check_tool(self) -> None:
-        if sp.call(['which', self._conversion_tool], stdout=sp.DEVNULL):
-            exit("abort: Cannot access conversion tool {}"
-                 .format(self._conversion_tool))
+    def check_tool(self, conversion_tool: str, concatenation_tool: str) -> None:
+        """
+        Checking if the tools are available
+        :param conversion_tool: the tool assigned for conversion
+        :param concatenation_tool: the tool assigned for concatenation
+        """
+        if sp.call(['which', conversion_tool], stdout=sp.DEVNULL):
+            self._logger.error(
+                "abort: Cannot access conversion tool {}".format(conversion_tool))
+            exit(2)
 
-        if (len(self._input) > 1)\
-                and sp.call(['which',
-                             self._concatenation_tool], stdout=sp.DEVNULL):
-            exit("abort: Cannot access concatenation_tool tool {}"
-                 .format(self._concatenation_tool))
+        if sp.call(['which', concatenation_tool], stdout=sp.DEVNULL):
+            self._logger.error(
+                "abort: Cannot access concatenation_tool tool {}".format(concatenation_tool))
+            exit(2)
+
+        self.cov_tool = conversion_tool
+        self.cat_tool = concatenation_tool
 
     def concatenate(self, out_name: str) -> str:
         if len(self._input) == 1:
