@@ -44,8 +44,7 @@ class Parser:
             help="the path to the output MP4 file, e.g. ./out/out.mp4")
 
         self.arg_parser.add_argument(
-            '--verbose', '-V', nargs='?', type=bool,
-            default=False,
+            '--verbose', '-V', action="store_true", default=False,
             help="Whether to print out the logging messages")
 
         self.arg_parser.add_argument(
